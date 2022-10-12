@@ -4,6 +4,9 @@ module.exports = (sequelize, Sequelize) => {
         type: Sequelize.INTEGER, 
         autoIncrement: true,
         primaryKey: true
+      },
+      content: {
+        type: Sequelize.STRING
       }
     });
     return SpecialList;
