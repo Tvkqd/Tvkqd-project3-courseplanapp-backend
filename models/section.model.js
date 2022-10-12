@@ -5,6 +5,9 @@ module.exports = (sequelize, Sequelize) => {
         type: Sequelize.INTEGER, 
         autoIncrement: true,
         primaryKey: true
+      },
+      number: {
+        type: Sequelize.STRING
       }
     });
     return Section;

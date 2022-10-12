@@ -1,6 +1,5 @@
 module.exports = (sequelize, Sequelize) => {
   const Course = sequelize.define("course", {
-    /*Change DB TYPES, make Description larger*/
     id: {
       type: Sequelize.INTEGER, 
       autoIncrement: true,
@@ -11,8 +10,7 @@ module.exports = (sequelize, Sequelize) => {
       type: Sequelize.STRING
     },
     course_number: {
-      type: Sequelize.STRING,
-      primaryKey: true
+      type: Sequelize.STRING
     },
     level: {
       type: Sequelize.STRING
