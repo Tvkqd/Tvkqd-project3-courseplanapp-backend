@@ -15,6 +15,9 @@ module.exports = (sequelize, Sequelize) => {
       endTime: {
         type: Sequelize.STRING
       }
+    },
+    {
+      timestamps: false,
     });
     return OfficeHour;
   };

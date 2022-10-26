@@ -14,6 +14,9 @@ module.exports = (sequelize, Sequelize) => {
       endDate: {
         type: Sequelize.DATEONLY
       }
+    },
+    {
+      timestamps: false,
     });
     return Semester;
   };

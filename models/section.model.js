@@ -9,6 +9,9 @@ module.exports = (sequelize, Sequelize) => {
       number: {
         type: Sequelize.STRING
       }
+    },
+    {
+      timestamps: false,
     });
     return Section;
   };
