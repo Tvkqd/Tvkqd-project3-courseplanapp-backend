@@ -12,6 +12,9 @@ module.exports = (sequelize, Sequelize) => {
       role: {
         type: Sequelize.STRING
       }
+    },
+    {
+      timestamps: false,
     });
     return User;
   };
