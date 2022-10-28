@@ -1,5 +1,4 @@
 module.exports = app => {
-  const express = require("express");
   const courses = require("../controllers/course.controller.js");
   var router = require("express").Router();
   const csvController = require("../controllers/csv.controller.js");
@@ -10,7 +9,7 @@ module.exports = app => {
   router.get("/", courses.findAll);
     // Retrieve a single with id
     // Retrieve a single with course_number
-  router.get("/:course_number", courses.findOne);
+  //router.get("/:course_number", courses.findOne);
     // Retrieve a single with department
   router.get("/dept/:dept", courses.findDept);
     // Retrieve a single with name
