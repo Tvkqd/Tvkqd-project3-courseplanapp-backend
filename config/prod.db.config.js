@@ -3,7 +3,7 @@ module.exports = {
     port: 3306,
     USER: 't12022',
     PASSWORD: 'cs@oc2022t1',
-    DB: 'p3-schedule-t1', //updated, verofy this
+    DB: 'p3-t1-schedule', //updated, verify this
     dialect: 'mysql',
     pool: {
         max: 5,
