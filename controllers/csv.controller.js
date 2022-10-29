@@ -19,7 +19,10 @@ const upload = async (req, res) => {
         throw error.message;
       })
       .on("data", (row) => {
-        courses.push(row);
+        let newRow = {dept:row["Depts"], course_number:row["Course #"], level:row["Crs Level"], hours:row["Min Cred"], name:row["Section Title"], description:row["Course Type"]}
+        console.log(newRow);
+        courses.push(newRow);
+        console.log(courses);
       })
       .on("end", () => {
         Course.bulkCreate(courses)

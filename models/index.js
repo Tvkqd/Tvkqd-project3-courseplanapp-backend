@@ -14,7 +14,7 @@ const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
 const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
-db.course = require("./course.model.js")(sequelize, Sequelize);
+db.courses = require("./course.model.js")(sequelize, Sequelize);
 db.faculty = require("./faculty.model.js")(sequelize, Sequelize);
 db.facultySection = require("./facultySection.model.js")(sequelize, Sequelize);
 db.officeHour = require("./officeHour.model.js")(sequelize, Sequelize);
@@ -25,8 +25,8 @@ db.semester = require("./semester.model.js")(sequelize, Sequelize);
 db.specialList = require("./specialList.model.js")(sequelize, Sequelize);
 db.user = require("./user.model.js")(sequelize, Sequelize);
 
-db.course.hasMany(db.section, { as: "section" }, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
-db.section.belongsTo(db.course, { as: "course"}, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
+db.courses.hasMany(db.section, { as: "section" }, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
+db.section.belongsTo(db.courses, { as: "course"}, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
 
 db.sectionTime.belongsTo(db.section, { as: "section"}, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
 
@@ -48,5 +48,4 @@ db.user.hasMany(db.officeHour, { as: "officeHour" }, { foreignKey: { allowNull: 
 db.officeHour.belongsTo(db.user, { as: "user"}, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
 
 db.specialList.belongsTo(db.user, { as: "user"}, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
-
 module.exports = db;

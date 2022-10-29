@@ -3,8 +3,8 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const app = express();
 var corsOptions = {
-//  origin: "http://localhost/schedule-t1"
-  origin: "http://localhost:8080"
+//origin: "http://localhost/schedule-t1"
+origin: "http://localhost:8081"
 };
 app.use(cors(corsOptions));
 app.options('*',cors());
@@ -34,8 +34,8 @@ db.sequelize.sync();
 //Connecting with database
 require("./routes/course.routes")(app)
 // set port, listen for requests
-//const PORT = process.env.PORT || 3011;
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 3011;
+//const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}.`);
 });
