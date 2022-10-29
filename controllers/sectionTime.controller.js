@@ -1,6 +1,5 @@
-//ASK ANDREW
 const db = require("../models");
-const FacultySection = db.facultySection;
+const SectionNumber = db.sectionNumber;
 const Op = db.Sequelize.Op;
 // Create and Save 
 exports.create = (req, res) => {
@@ -12,32 +11,32 @@ exports.create = (req, res) => {
         return;
     }
     // Create
-    const facultySection = {
+    const sectionNumber = {
         name: req.body.name
     };
     // Save in the database
-    FacultySection.create(facultySection)
+    SectionNumber.create(sectionNumber)
         .then(data => {
         res.send(data);
         })
         .catch(err => {
         res.status(500).send({
             message:
-            err.message || "Some error occurred while creating the FacultySection."
+            err.message || "Some error occurred while creating the SectionNumber."
         });
         });
 };
 
 // Retrieve all courses from the database.
 exports.findAll = (req, res) => {
-    FacultySection.findAll()
+    SectionNumber.findAll()
         .then(data => {
         res.send(data);
         })
         .catch(err => {
         res.status(500).send({
             message:
-            err.message || "Some error occurred while retrieving FacultySection."
+            err.message || "Some error occurred while retrieving SectionNumber."
         });
       });
 };
@@ -45,67 +44,67 @@ exports.findAll = (req, res) => {
 // Find a single course with a id
 exports.findOne = (req, res) => {
     const id = req.params.id;
-    FacultySection.findByPk(id)
+    SectionNumber.findByPk(id)
       .then(data => {
         if (data) {
           res.send(data);
         } else {
           res.status(404).send({
-            message: `Cannot find FacultySection with id=${id}.`
+            message: `Cannot find SectionNumber with id=${id}.`
           });
         }
       })
       .catch(err => {
         res.status(500).send({
-          message: "Error retrieving FacultySection with id=" + id
+          message: "Error retrieving SectionNumber with id=" + id
         });
       });
 };
 // Update by the id in the request
 exports.update = (req, res) => {
     const id = req.params.id;
-    FacultySection.update(req.body, {
+    SectionNumber.update(req.body, {
       where: { id: id }
     })
       .then(num => {
         if (num == 1) {
           res.send({
-            message: "FacultySection was updated successfully."
+            message: "SectionNumber was updated successfully."
           });
         } else {
           res.send({
-            message: `Cannot update FacultySection with id=${id}. Maybe FacultySection was not found or req.body is empty!`
+            message: `Cannot update SectionNumber with id=${id}. Maybe SectionNumber was not found or req.body is empty!`
           });
         }
       })
       .catch(err => {
         res.status(500).send({
-          message: "Error updating FacultySection with id=" + id
+          message: "Error updating SectionNumber with id=" + id
         });
       });
 };
 // Delete with the specified id in the request
 exports.delete = (req, res) => {
     const id = req.params.id;
-    FacultySection.destroy({
+    SectionNumber.destroy({
       where: { id: id }
     })
       .then(num => {
         if (num == 1) {
           res.send({
-            message: "Faculty was deleted successfully!"
+            message: "SectionNumber was deleted successfully!"
           });
         } else {
           console.log("error: " + num)
           res.send({
-            message: `Cannot delete Faculty with id=${id}. Maybe FacultySection was not found!`
+            message: `Cannot delete SectionNumber with id=${id}. Maybe SectionNumber was not found!`
           });
         }
       })
       .catch(err => {
         console.log("error: " + err)
         res.status(500).send({
-          message: "Could not delete FacultySection with id=" + id
+          message: "Could not delete SectionNumber with id=" + id
         });
       });
 };

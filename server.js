@@ -31,7 +31,16 @@ db.sequelize.sync();
 
 //Connecting with database
 require("./routes/course.routes.js")(app)
-require("./routes/course.faculty.js")(app)
+require("./routes/faculty.routes.js")(app)
+require("./routes/facultySection.routes.js")(app)
+require("./routes/officeHour.routes.js")(app)
+require("./routes/room.routes.js")(app)
+require("./routes/section.routes.js")(app)
+require("./routes/sectionTime.routes.js")(app)
+require("./routes/semester.routes.js")(app)
+require("./routes/specialList.routes.js")(app)
+require("./routes/user.routes.js")(app)
+
 // set port, listen for requests, changed to appropriate port defined for the project
 const PORT = process.env.PORT || 3011;
 //const PORT = process.env.PORT || 8080;

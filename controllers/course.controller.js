@@ -1,5 +1,5 @@
 const db = require("../models");
-const Course = db.courses;
+const Course = db.course;
 const Op = db.Sequelize.Op;
 // Create and Save 
 exports.create = (req, res) => {
