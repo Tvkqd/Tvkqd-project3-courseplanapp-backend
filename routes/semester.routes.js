@@ -1,5 +1,5 @@
 module.exports = app => {
-    const semester = require("../controllers/faculty.controller.js");
+    const semester = require("../controllers/semester.controller.js");
     var router = require("express").Router();
     // Create 
     router.post("/", semester.create);

@@ -1,5 +1,5 @@
 module.exports = app => {
-    const officeHour = require("../controllers/faculty.controller.js");
+    const officeHour = require("../controllers/officeHour.controller.js");
     var router = require("express").Router();
     // Create 
     router.post("/", officeHour.create);

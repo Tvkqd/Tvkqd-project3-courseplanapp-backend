@@ -1,5 +1,5 @@
 module.exports = app => {
-    const sectionTime = require("../controllers/faculty.controller.js");
+    const sectionTime = require("../controllers/sectionTime.controller.js");
     var router = require("express").Router();
     // Create 
     router.post("/", sectionTime.create);

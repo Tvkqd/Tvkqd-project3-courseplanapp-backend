@@ -1,5 +1,5 @@
 module.exports = app => {
-    const section = require("../controllers/faculty.controller.js");
+    const section = require("../controllers/section.controller.js");
     var router = require("express").Router();
     // Create 
     router.post("/", section.create);
