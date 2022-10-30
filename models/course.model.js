@@ -10,7 +10,12 @@ module.exports = (sequelize, Sequelize) => {
     },
     course_number: {
       type: Sequelize.STRING,
-      primaryKey: true
+    },
+    subject: {
+      type: Sequelize.STRING
+    },
+    courseNum: {
+      type: Sequelize.INTEGER
     },
     level: {
       type: Sequelize.STRING

@@ -6,7 +6,13 @@ module.exports = (sequelize, Sequelize) => {
         primaryKey: true
       },
   
-      name: {
+      fName: {
+        type: Sequelize.STRING
+      },
+      lName: {
+        type: Sequelize.STRING
+      },
+      mName: {
         type: Sequelize.STRING
       }
     },
