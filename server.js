@@ -3,11 +3,13 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const app = express();
 var corsOptions = {
-//  origin: "http://localhost/schedule-t1"
-  origin: "http://localhost:8080"
+//origin: "http://localhost/schedule-t1"
+origin: "http://localhost:8081"
 };
 app.use(cors(corsOptions));
 app.options('*',cors());
+
+global.__basedir = __dirname;
 
 // parse requests of content-type - application/json
 app.use(bodyParser.json());
