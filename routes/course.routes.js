@@ -2,7 +2,7 @@ module.exports = app => {
     const courses = require("../controllers/course.controller.js");
     var router = require("express").Router();
     const csvController = require("../controllers/csv.controller.js");
-    const upload = require("../middlewares/upload");
+    const uploadCourses = require("../middlewares/uploadCourses");
     // Create 
     router.post("/", courses.create);
     // Retrieve all 
@@ -18,8 +18,8 @@ module.exports = app => {
     router.put("/:id", courses.update);
     // Delete with id
     router.delete("/:id", courses.delete);
-    // Upload file
-    router.post("/upload", upload.single("file"), csvController.upload);
+    // Upload courses file
+    router.post("/upload/courses", uploadCourses.single("file"), csvController.uploadCourses);
 
     app.use('/schedule-t1', router);
   };

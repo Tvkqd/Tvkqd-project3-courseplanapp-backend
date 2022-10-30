@@ -4,14 +4,15 @@ const Course = db.courses;
 const fs = require("fs");
 const csv = require("fast-csv");
 
-const upload = async (req, res) => {
+// Courses file
+const uploadCourses = async (req, res) => {
   try {
     if (req.file == undefined) {
       return res.status(400).send("Please upload a CSV file!");
     }
 
     let courses = [];
-    let path = __basedir + "/resources/static/assets/uploads/" + req.file.filename;
+    let path = __basedir + "/resources/static/assets/uploads/courses/" + req.file.filename;
 
     fs.createReadStream(path)
       .pipe(csv.parse({ headers: true }))
@@ -19,7 +20,7 @@ const upload = async (req, res) => {
         throw error.message;
       })
       .on("data", (row) => {
-        let newRow = {dept:row["Depts"], course_number:row["Course #"], level:row["Crs Level"], hours:row["Min Cred"], name:row["Section Title"], description:row["Course Type"]}
+        let newRow = {dept:row["Department"], course_number:row["Course"], level:row["Course Levels"], hours:row["Min Credits"], name:row["Short Title"], description:row["Description"]}
         console.log(newRow);
         courses.push(newRow);
         console.log(courses);
@@ -61,6 +62,6 @@ const getCourses = (req, res) => {
 };
 
 module.exports = {
-  upload,
+  uploadCourses,
   getCourses
 };
