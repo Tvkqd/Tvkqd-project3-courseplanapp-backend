@@ -20,6 +20,6 @@ module.exports = app => {
     router.delete("/:id", courses.delete);
     // Upload courses file
     router.post("/upload/courses", uploadCourses.single("file"), csvController.uploadCourses);
-
+    
     app.use('/schedule-t1', router);
   };
