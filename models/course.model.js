@@ -2,12 +2,11 @@
 module.exports = (sequelize, Sequelize) => {
   const Course = sequelize.define("course", {
     id: {
-      type: Sequelize.INTEGER, 
+      type: Sequelize.INTEGER,
       autoIncrement: true,
       primaryKey: true,
       unique: true
     },
-
     dept: {
       type: Sequelize.STRING,
       allowNull: false
@@ -29,6 +28,9 @@ module.exports = (sequelize, Sequelize) => {
     description: {
       type: Sequelize.STRING
     }
+  },
+  {
+    timestamps: false,
   });
   return Course;
 };

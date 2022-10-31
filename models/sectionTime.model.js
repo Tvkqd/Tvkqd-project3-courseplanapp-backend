@@ -25,6 +25,9 @@ module.exports = (sequelize, Sequelize) => {
       dayWeek: {
         type: Sequelize.STRING
       }
+    },
+    {
+      timestamps: false,
     });
     return SectionTime;
   };
