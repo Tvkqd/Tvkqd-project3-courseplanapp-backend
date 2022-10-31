@@ -3,7 +3,8 @@ module.exports = (sequelize, Sequelize) => {
       id: {
         type: Sequelize.INTEGER, 
         autoIncrement: true,
-        primaryKey: true
+        primaryKey: true,
+        unique: true
       },
   
       number: {
@@ -12,9 +13,6 @@ module.exports = (sequelize, Sequelize) => {
       capacity: {
         type: Sequelize.INTEGER
       }
-    },
-    {
-      timestamps: false,
     });
     return Room;
   };
