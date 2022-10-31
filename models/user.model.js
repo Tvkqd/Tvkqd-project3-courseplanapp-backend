@@ -15,9 +15,6 @@ module.exports = (sequelize, Sequelize) => {
         type: Sequelize.STRING,
         allowNull: false
       }
-    },
-    {
-      timestamps: false,
     });
     return User;
   };

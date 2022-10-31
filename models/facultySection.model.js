@@ -6,9 +6,6 @@ module.exports = (sequelize, Sequelize) => {
         primaryKey: true,
         unique : true
       }
-    },
-    {
-      timestamps: false,
     });
     return FacultySection;
   };

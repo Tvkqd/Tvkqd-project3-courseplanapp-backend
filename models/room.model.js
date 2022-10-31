@@ -13,9 +13,6 @@ module.exports = (sequelize, Sequelize) => {
       capacity: {
         type: Sequelize.INTEGER
       }
-    },
-    {
-      timestamps: false,
     });
     return Room;
   };
