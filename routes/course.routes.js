@@ -1,24 +1,25 @@
 module.exports = app => {
-    const course = require("../controllers/course.controller.js");
+    const courses = require("../controllers/course.controller.js");
     var router = require("express").Router();
     const csvController = require("../controllers/csv.controller.js");
     const uploadCourses = require("../middlewares/uploadCourses");
     // Create 
-    router.post("/", course.create);
+    router.post("/", courses.create);
     // Retrieve all 
-    router.get("/", course.findAll);
+    router.get("/", courses.findAll);
     // Retrieve a single with id
-    router.get("/:id", course.findOne);
+    // Retrieve a single with course_number
+    router.get("/:course_number", courses.findOne);
     // Retrieve a single with department
-    router.get("/dept/:dept", course.findDept);
+    router.get("/dept/:dept", courses.findDept);
     // Retrieve a single with name
-    router.get("/name/:name", course.findName);
+    router.get("/name/:name", courses.findName);
     // Update with id
-    router.put("/:id", course.update);
+    router.put("/:id", courses.update);
     // Delete with id
-    router.delete("/:id", course.delete);
+    router.delete("/:id", courses.delete);
     // Upload courses file
     router.post("/upload/courses", uploadCourses.single("file"), csvController.uploadCourses);
-     //Changed to schedule to build the api path to match the AWS server. Making router file unique by adding /courses
-    app.use('/schedule-t1/course', router);
+    
+    app.use('/schedule-t1', router);
   };
