@@ -3,17 +3,14 @@ module.exports = (sequelize, Sequelize) => {
       id: {
         type: Sequelize.INTEGER, 
         autoIncrement: true,
-        primaryKey: true,
-        unique: true
+        primaryKey: true
       },
   
       email: {
-        type: Sequelize.STRING,
-        allowNull: false
+        type: Sequelize.STRING
       },
       role: {
-        type: Sequelize.STRING,
-        allowNull: false
+        type: Sequelize.STRING
       }
     });
     return User;

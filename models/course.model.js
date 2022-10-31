@@ -1,30 +1,26 @@
-//This is the course table. Changes here make changes to the database.
 module.exports = (sequelize, Sequelize) => {
   const Course = sequelize.define("course", {
     id: {
       type: Sequelize.INTEGER, 
       autoIncrement: true,
-      primaryKey: true,
-      unique: true
+      primaryKey: true
     },
 
     dept: {
-      type: Sequelize.STRING,
-      allowNull: false
+      type: Sequelize.STRING
     },
     course_number: {
       type: Sequelize.STRING,
-      allowNull : false
+      primaryKey: true
     },
     level: {
-      type: Sequelize.STRING,
+      type: Sequelize.STRING
     },
     hours: {
       type: Sequelize.STRING
     },
     name: {
-      type: Sequelize.STRING,
-      allowNull : false
+      type: Sequelize.STRING
     },
     description: {
       type: Sequelize.STRING
