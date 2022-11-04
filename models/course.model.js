@@ -14,12 +14,7 @@ module.exports = (sequelize, Sequelize) => {
     },
     course_number: {
       type: Sequelize.STRING,
-    },
-    subject: {
-      type: Sequelize.STRING
-    },
-    courseNum: {
-      type: Sequelize.INTEGER
+      allowNull : false
     },
     level: {
       type: Sequelize.STRING,

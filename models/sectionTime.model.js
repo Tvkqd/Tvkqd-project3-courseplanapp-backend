@@ -24,15 +24,6 @@ module.exports = (sequelize, Sequelize) => {
       },
       dayWeek: {
         type: Sequelize.STRING
-      },
-      numWeek: {
-        type: Sequelize.INTEGER
-      },
-      capacity: {
-        type: Sequelize.INTEGER
-      },
-      instrMethod: {
-        type: Sequelize.STRING
       }
     });
     return SectionTime;

@@ -6,14 +6,12 @@ module.exports = (sequelize, Sequelize) => {
         primaryKey: true,
         unique: true
       },
+  
       number: {
         type: Sequelize.STRING
       },
-      bldg: {
-        type: Sequelize.STRING
-      },
-      name: {
-        type: Sequelize.STRING
+      capacity: {
+        type: Sequelize.INTEGER
       }
     });
     return Room;
