@@ -23,8 +23,19 @@ const uploadSections = async (req, res) => {
       async function processData(row){
         // Foreign key courseID
         console.log(row);
+        let number = row["Course #"];
+        if (number.length == 1){
+          number = "000".concat(number);
+        }
+        else if (number.length == 2){
+          number = "00".concat(number);
+        }
+        else if (number.length == 3){
+          number = "0".concat(number);
+        }
+        number = row["Subject"].concat("-",number);
         const [course, createdCourse] = await Course.findOrCreate({
-          where: { dept: row["Depts"], subject: row["Subject"], courseNum:row["Course #"]},
+          where: { dept: row["Depts"], course_number: number, subject: row["Subject"], courseNum:row["Course #"], level: row["Crs Level"], hours: row["Min Cred"], name: row["Section Title"]},
         });
         console.log(course.id);
         console.log(createdCourse);
@@ -48,6 +59,45 @@ const uploadSections = async (req, res) => {
         console.log(createdRoom);
         // Read data for sectionTime table
         let newRow = {startDate:row["Sec Start Date"], endDate:row["Sec End Date"], startTime:row["Start Time 24hr"], endTime:row["End Time 24hr"], dayWeek:row["Days"], numWeek:row["Sec Num Of Weeks "], capacity:row["Capacity"], instrMethod:row["Instr Method"], sectionId:section.id, roomId:room.id}
+        
+        // Checking LEC, LAB
+        let start =  row["Start Time 24hr"].split(", ");
+        let end = row["End Time 24hr"].split(", ");
+        let building = row["Bldg2"].split(", ");
+        let location = row["Room"].split(", ");
+        let method = row["Instr Method"].split(", ");
+        if (start.length > 1){   
+          // Foreign key sectionID
+          const [section, createdSection] = await Section.findOrCreate({
+            where: { number: row["Section Number"].concat("L"), subject: row["Subject"], courseNum:row["Course #"], sectionNum: row["Section #"], title: row["Section Title"], courseId: course.id, semesterId: semester.id },
+          });
+          console.log(section.id);
+          console.log(createdSection);
+          // Foreign key roomID
+          const [room, createdRoom] = await Room.findOrCreate({
+            where: {number: location[1], bldg: building[1], name: building[1].concat("*",location[1])},
+          });
+          console.log(room.id);
+          console.log(createdRoom);
+          // Day week for Lab and Lec
+          let days = row["Days"].split(" ");
+          let day = days[days.length-1];
+          let correctDay;
+          if (day.charAt(0) != 'T' || day.charAt(1) != 'H'){
+            correctDay = day.slice(1,days.length);
+          }
+          else{
+            correctDay = day.slice(2, days.length);
+          }
+          newRow.dayWeek = row["Days"].slice(0, row["Days"].length - correctDay.length);
+          newRow.instrMethod = method[0];
+          // Data for LAB
+          let newRow1 = {startDate:row["Sec Start Date"], endDate:row["Sec End Date"], startTime:start[1], endTime:end[1], dayWeek:correctDay, numWeek:row["Sec Num Of Weeks "], capacity:row["Capacity"], instrMethod:method[1], sectionId:section.id, roomId:room.id};
+          console.log(newRow1);
+          sectionTimes.push(newRow1);
+          console.log(sectionTimes);
+        }
+        // Data for LEC
         console.log(newRow);
         sectionTimes.push(newRow);
         console.log(sectionTimes);
