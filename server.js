@@ -3,13 +3,12 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const app = express();
 var corsOptions = {
-//origin: "http://localhost/schedule-t1"
-origin: "http://localhost:8080"
+// origin: "http://localhost/schedule-t1"
+  origin: "http://localhost:8080"
+
 };
 app.use(cors(corsOptions));
 app.options('*',cors());
-
-global.__basedir = __dirname;
 
 // parse requests of content-type - application/json
 app.use(bodyParser.json());
@@ -44,7 +43,7 @@ require("./routes/semester.routes.js")(app)
 require("./routes/specialList.routes.js")(app)
 require("./routes/user.routes.js")(app)
 
-// set port, listen for requests
+// set port, listen for requests, changed to appropriate port defined for the project
 const PORT = process.env.PORT || 3011;
 //const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
