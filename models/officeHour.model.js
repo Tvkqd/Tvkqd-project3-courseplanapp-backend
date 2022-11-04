@@ -3,7 +3,8 @@ module.exports = (sequelize, Sequelize) => {
       id: {
         type: Sequelize.INTEGER, 
         autoIncrement: true,
-        primaryKey: true
+        primaryKey: true,
+        unique : true
       },
   
       dayWeek: {
@@ -15,9 +16,6 @@ module.exports = (sequelize, Sequelize) => {
       endTime: {
         type: Sequelize.STRING
       }
-    },
-    {
-      timestamps: false,
     });
     return OfficeHour;
   };

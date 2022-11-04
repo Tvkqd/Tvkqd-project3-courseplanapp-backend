@@ -3,15 +3,19 @@ module.exports = (sequelize, Sequelize) => {
       id: {
         type: Sequelize.INTEGER, 
         autoIncrement: true,
-        primaryKey: true
+        primaryKey: true,
+        unique: true
       },
   
-      name: {
+      fName: {
+        type: Sequelize.STRING
+      },
+      lName: {
+        type: Sequelize.STRING
+      },
+      mName: {
         type: Sequelize.STRING
       }
-    },
-    {
-      timestamps: false,
     });
     return Faculty;
   };

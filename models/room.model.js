@@ -3,18 +3,18 @@ module.exports = (sequelize, Sequelize) => {
       id: {
         type: Sequelize.INTEGER, 
         autoIncrement: true,
-        primaryKey: true
+        primaryKey: true,
+        unique: true
       },
-  
       number: {
         type: Sequelize.STRING
       },
-      capacity: {
-        type: Sequelize.INTEGER
+      bldg: {
+        type: Sequelize.STRING
+      },
+      name: {
+        type: Sequelize.STRING
       }
-    },
-    {
-      timestamps: false,
     });
     return Room;
   };
