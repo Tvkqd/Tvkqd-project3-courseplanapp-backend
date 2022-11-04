@@ -8,8 +8,19 @@ module.exports = (sequelize, Sequelize) => {
         unqiue: true
       },
       number: {
-        type: Sequelize.STRING,
-        allowNull: false
+        type: Sequelize.STRING
+      },
+      subject: {
+        type: Sequelize.STRING
+      },
+      courseNum: {
+        type: Sequelize.INTEGER
+      },
+      sectionNum: {
+        type: Sequelize.STRING
+      },
+      title: {
+        type: Sequelize.STRING
       }
     });
     return Section;

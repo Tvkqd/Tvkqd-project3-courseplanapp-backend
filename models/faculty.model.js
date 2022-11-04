@@ -7,9 +7,14 @@ module.exports = (sequelize, Sequelize) => {
         unique: true
       },
   
-      name: {
-        type: Sequelize.STRING,
-        allowNull: false
+      fName: {
+        type: Sequelize.STRING
+      },
+      lName: {
+        type: Sequelize.STRING
+      },
+      mName: {
+        type: Sequelize.STRING
       }
     });
     return Faculty;
