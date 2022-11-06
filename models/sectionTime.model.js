@@ -4,17 +4,14 @@ module.exports = (sequelize, Sequelize) => {
       id: {
         type: Sequelize.INTEGER, 
         autoIncrement: true,
-        primaryKey: true,
-        unique: true
+        primaryKey: true
       },
   
       startDate: {
-        type: Sequelize.DATEONLY,
-        allowNull: false
+        type: Sequelize.DATEONLY
       },
       endDate: {
-        type: Sequelize.DATEONLY,
-        allowNull: false
+        type: Sequelize.DATEONLY
       },
       startTime: {
         type: Sequelize.TIME
@@ -34,6 +31,9 @@ module.exports = (sequelize, Sequelize) => {
       instrMethod: {
         type: Sequelize.STRING
       }
+    },
+    {
+      timestamps: false,
     });
     return SectionTime;
   };

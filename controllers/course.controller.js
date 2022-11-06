@@ -1,27 +1,15 @@
 const db = require("../models");
-const Course = db.course;
+const Course = db.courses;
 const Op = db.Sequelize.Op;
 // Create and Save 
 exports.create = (req, res) => {
-        // Validate input
+        // Valcourse_numberate request
     if (!req.body.course_number) {
         res.status(400).send({
-        message: "Course number can not be empty!"
+        message: "Content can not be empty!"
         });
         return;
-    } 
-    else if (!req.body.name) {
-      res.status(400).send({
-      message: "Name can not be empty!"
-      });
-      return;
-  } 
-    else if (!req.body.dept) {
-    res.status(400).send({
-    message: "Department can not be empty!"
-    });
-    return;
-} 
+    }
     // Create
     const course = {
         dept: req.body.dept,
@@ -46,9 +34,9 @@ exports.create = (req, res) => {
 
 // Retrieve all courses from the database.
 exports.findAll = (req, res) => {
-    //const course_number = req.query.course_number;
-    //var condition =course_number ? {course_number: { [Op.like]: `%$course_number}%` } } : null;
-    Course.findAll()
+    const course_number = req.query.course_number;
+    var condition =course_number ? {course_number: { [Op.like]: `%$course_number}%` } } : null;
+    Course.findAll({ where: condition })
         .then(data => {
         res.send(data);
         })
@@ -92,20 +80,20 @@ exports.findName = (req, res) => {
 
 // Find a single course with a course_number
 exports.findOne = (req, res) => {
-    const id = req.params.id;
-    Course.findByPk(id)
+    const course_number = req.params.course_number;
+    Course.findByPk(course_number)
       .then(data => {
         if (data) {
           res.send(data);
         } else {
           res.status(404).send({
-            message: `Cannot find Course with id=${id}.`
+            message: `Cannot find Course with course_number=${course_number}.`
           });
         }
       })
       .catch(err => {
         res.status(500).send({
-          message: "Error retrieving Course with id=" + id
+          message: "Error retrieving Course with course_number=" + course_number
         });
       });
 };

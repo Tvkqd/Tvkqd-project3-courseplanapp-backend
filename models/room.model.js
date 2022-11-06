@@ -3,8 +3,7 @@ module.exports = (sequelize, Sequelize) => {
       id: {
         type: Sequelize.INTEGER, 
         autoIncrement: true,
-        primaryKey: true,
-        unique: true
+        primaryKey: true
       },
       number: {
         type: Sequelize.STRING
@@ -15,6 +14,9 @@ module.exports = (sequelize, Sequelize) => {
       name: {
         type: Sequelize.STRING
       }
+    },
+    {
+      timestamps: false,
     });
     return Room;
   };

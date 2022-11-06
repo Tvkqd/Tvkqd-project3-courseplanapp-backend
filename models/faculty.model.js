@@ -3,8 +3,7 @@ module.exports = (sequelize, Sequelize) => {
       id: {
         type: Sequelize.INTEGER, 
         autoIncrement: true,
-        primaryKey: true,
-        unique: true
+        primaryKey: true
       },
   
       fName: {
@@ -16,6 +15,9 @@ module.exports = (sequelize, Sequelize) => {
       mName: {
         type: Sequelize.STRING
       }
+    },
+    {
+      timestamps: false,
     });
     return Faculty;
   };

@@ -8,6 +8,9 @@ module.exports = (sequelize, Sequelize) => {
       content: {
         type: Sequelize.STRING
       }
+    },
+    {
+      timestamps: false,
     });
     return SpecialList;
   };
