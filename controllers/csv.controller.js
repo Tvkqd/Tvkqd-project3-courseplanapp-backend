@@ -4,11 +4,14 @@ const SectionTime = db.sectionTime;
 const Section = db.section;
 const Semester = db.semester;
 const Room = db.room;
+const Faculty = db.faculty;
+const User = db.user;
+const FacultySection = db.facultySection;
 
 const fs = require("fs");
 const csv = require("fast-csv");
 
-// Sections file
+// Sections file sectionTime table
 const uploadSections = async (req, res) => {
   try {
     if (req.file == undefined) {
@@ -16,6 +19,7 @@ const uploadSections = async (req, res) => {
     }
 
     let sectionTimes = [];
+    let facultySections = []
     let path = __basedir + "/resources/static/assets/uploads/sections/" + req.file.filename;
 
     new Promise((resolve, reject) => {
@@ -53,19 +57,43 @@ const uploadSections = async (req, res) => {
         console.log(createdSection);
         // Foreign key roomID
         const [room, createdRoom] = await Room.findOrCreate({
-          where: {bldg: row["Bldg1"], name: row["Room1"] },
+          where: {bldg: row["Bldg1"], name: row["Room1"], number: row["Room1"].split("*")[1] },
         });
         console.log(room.id);
         console.log(createdRoom);
-        // Read data for sectionTime table
-        let newRow = {startDate:row["Sec Start Date"], endDate:row["Sec End Date"], startTime:row["Start Time 24hr"], endTime:row["End Time 24hr"], dayWeek:row["Days"], numWeek:row["Sec Num Of Weeks "], capacity:row["Capacity"], instrMethod:row["Instr Method"], sectionId:section.id, roomId:room.id}
         
-        // Checking LEC, LAB
+        // LEC faculty
+          let name = row["Faculty Name (LFM)"].split(", ");
+          let first = name[1].split(" ")[0];
+          let middle = name[1].split(" ")[1];
+          let last = name[0];
+          // Foreign key user
+          const [user, createdUser] = await User.findOrCreate({
+            where: {email: first.concat(".", name[0], "@oc.edu"), role: "Faculty" },
+          });
+          console.log(user.id);
+          console.log(createdUser);
+          // Foreign key faculty
+          const [faculty, createdFaculty] = await Faculty.findOrCreate({
+            where: {fName: first, lName: last, mName: middle, userId:user.id },
+          });
+          console.log(faculty.id);
+          console.log(createdFaculty);
+  
+          // Read data for facultySection table
+          let faclRow = {facultyId: faculty.id, sectionId: section.id };
+          facultySections.push(faclRow);
+          console.log(faclRow);
+       
+        // Read data for sectionTime table
         let start =  row["Start Time 24hr"].split(", ");
         let end = row["End Time 24hr"].split(", ");
         let building = row["Bldg2"].split(", ");
         let location = row["Room"].split(", ");
         let method = row["Instr Method"].split(", ");
+        let newRow = {startDate:row["Sec Start Date"], endDate:row["Sec End Date"], startTime:start[0], endTime:end[0], dayWeek:row["Days"], numWeek:row["Sec Num Of Weeks "], capacity:row["Capacity"], instrMethod:row["Instr Method"], sectionId:section.id, roomId:room.id}
+        
+        // Checking LEC, LAB
         if (start.length > 1){   
           // Foreign key sectionID
           const [section, createdSection] = await Section.findOrCreate({
@@ -79,6 +107,28 @@ const uploadSections = async (req, res) => {
           });
           console.log(room.id);
           console.log(createdRoom);
+          // LAB faculty
+          let name = row["Faculty Name 2 (LFM)"].split(", ");
+          let first = name[1].split(" ")[0];
+          let middle = name[1].split(" ")[1];
+          let last = name[0];
+          // Foreign key user
+          const [user, createdUser] = await User.findOrCreate({
+            where: {email: first.concat(".", name[0], "@oc.edu"), role: "Faculty" },
+          });
+          console.log(user.id);
+          console.log(createdUser);
+          // Foreign key faculty
+          const [faculty, createdFaculty] = await Faculty.findOrCreate({
+            where: {fName: first, lName: last, mName: middle, userId:user.id },
+          });
+          console.log(faculty.id);
+          console.log(createdFaculty);
+  
+          // Read data for facultySection table
+          let faclRow = {facultyId: faculty.id, sectionId: section.id };
+          facultySections.push(faclRow);
+          console.log(faclRow);
           // Day week for Lab and Lec
           let days = row["Days"].split(" ");
           let day = days[days.length-1];
@@ -103,7 +153,7 @@ const uploadSections = async (req, res) => {
         console.log(sectionTimes);
       }
       fs.createReadStream(path)
-        .pipe(csv.parse({ headers: ["Term","Synonym","UG/GR","Section Number","Subject","Course #","Section #","Crs Level","Course Type","Reg Restrictions","Bldg1","Room1","Section Title","Faculty Name (LFM)","Faculty Name 2 (LFM)","Sec Start Date","Meeting Start Date","Sec End Date","Meeting End Date","Start Time1","End Time1","Days","Sec Num Of Weeks ","Min Cred","Max Cred","Capacity","Enr Count","Wait","Depts","Divisions","College","Faculty Last Name","Faculty First Name","Instr Method","Sun","Mon","Tue","Wed","Thu","Fri","Sat","SEC.XLIST","SEC.FEE","Primary Section ","SEC.COMMENTS","SEC.PRINTED.COMMENTS","Academic Year","Term Sort No","Only Pass/NoPass","Allow Pass/NoPass","Bldg2","Room","Start Date","End Date","Start Time2","Start Time 24hr","End Time2","End Time 24hr"], renameHeaders:true }))
+        .pipe(csv.parse({ headers: ["Term","Synonym","UG/GR","Section Number","Subject","Course #","Section #","Crs Level","Course Type","Reg Restrictions","Bldg1","Room1","Section Title","Faculty Name (LFM)","Faculty Name 2 (LFM)","Sec Start Date","Meeting Start Date","Sec End Date","Meeting End Date","Start Time1","End Time1","Days","Sec Num Of Weeks ","Min Cred","Max Cred","Capacity","Enr Count","Wait","Depts","Divisions","College","Faculty name Name","Faculty First Name","Instr Method","Sun","Mon","Tue","Wed","Thu","Fri","Sat","SEC.XLIST","SEC.FEE","Primary Section ","SEC.COMMENTS","SEC.PRINTED.COMMENTS","Academic Year","Term Sort No","Only Pass/NoPass","Allow Pass/NoPass","Bldg2","Room","Start Date","End Date","Start Time2","Start Time 24hr","End Time2","End Time 24hr"], renameHeaders:true }))
         .on("error", (error) => {
           throw error.message;
         })
@@ -114,6 +164,7 @@ const uploadSections = async (req, res) => {
           resolve();
           console.log(sectionTimes)
           await SectionTime.bulkCreate(sectionTimes)
+          await FacultySection.bulkCreate(facultySections)
           .then(() => {
                     res.status(200).send({
                       message:
@@ -129,7 +180,7 @@ const uploadSections = async (req, res) => {
         });
     });
     // fs.createReadStream(path)
-    //   .pipe(csv.parse({ headers: ["Term","Synonym","UG/GR","Section Number","Subject","Course #","Section #","Crs Level","Course Type","Reg Restrictions","Bldg1","Room1","Section Title","Faculty Name (LFM)","Faculty Name 2 (LFM)","Sec Start Date","Meeting Start Date","Sec End Date","Meeting End Date","Start Time1","End Time1","Days","Sec Num Of Weeks ","Min Cred","Max Cred","Capacity","Enr Count","Wait","Depts","Divisions","College","Faculty Last Name","Faculty First Name","Instr Method","Sun","Mon","Tue","Wed","Thu","Fri","Sat","SEC.XLIST","SEC.FEE","Primary Section ","SEC.COMMENTS","SEC.PRINTED.COMMENTS","Academic Year","Term Sort No","Only Pass/NoPass","Allow Pass/NoPass","Bldg2","Room","Start Date","End Date","Start Time2","Start Time 24hr","End Time2","End Time 24hr"], renameHeaders:true }))
+    //   .pipe(csv.parse({ headers: ["Term","Synonym","UG/GR","Section Number","Subject","Course #","Section #","Crs Level","Course Type","Reg Restrictions","Bldg1","Room1","Section Title","Faculty Name (LFM)","Faculty Name 2 (LFM)","Sec Start Date","Meeting Start Date","Sec End Date","Meeting End Date","Start Time1","End Time1","Days","Sec Num Of Weeks ","Min Cred","Max Cred","Capacity","Enr Count","Wait","Depts","Divisions","College","Faculty name Name","Faculty First Name","Instr Method","Sun","Mon","Tue","Wed","Thu","Fri","Sat","SEC.XLIST","SEC.FEE","Primary Section ","SEC.COMMENTS","SEC.PRINTED.COMMENTS","Academic Year","Term Sort No","Only Pass/NoPass","Allow Pass/NoPass","Bldg2","Room","Start Date","End Date","Start Time2","Start Time 24hr","End Time2","End Time 24hr"], renameHeaders:true }))
     //   .on("error", (error) => {
     //     throw error.message;
     //   })
