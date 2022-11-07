@@ -47,5 +47,12 @@ db.faculty.belongsTo(db.user, { as: "user"}, { foreignKey: { allowNull: false },
 db.user.hasMany(db.officeHour, { as: "officeHour" }, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
 db.officeHour.belongsTo(db.user, { as: "user"}, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
 
+//db.specialList.belongsTo(db.user, { as: "user"}, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
+
+db.user.hasMany(db.specialList, { as: "specialList" }, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
 db.specialList.belongsTo(db.user, { as: "user"}, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
+
+db.courses.hasMany(db.specialList, { as: "specialList" }, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
+db.specialList.belongsTo(db.courses, { as: "course"}, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
+
 module.exports = db;
