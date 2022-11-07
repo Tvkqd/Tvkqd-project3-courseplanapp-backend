@@ -5,6 +5,7 @@ const app = express();
 var corsOptions = {
 // origin: "http://localhost/schedule-t1"
   origin: "http://localhost:8080"
+
 };
 app.use(cors(corsOptions));
 app.options('*',cors());
@@ -30,6 +31,7 @@ db.sequelize.sync().then(() => {
 db.sequelize.sync();
 
 //Connecting with database
+require("./routes/upload.routes")(app)
 require("./routes/course.routes.js")(app)
 require("./routes/faculty.routes.js")(app)
 require("./routes/facultySection.routes.js")(app)
