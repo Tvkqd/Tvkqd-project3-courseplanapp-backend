@@ -258,7 +258,7 @@ const uploadCourses = async (req, res) => {
         throw error.message;
       })
       .on("data", (row) => {
-        let newRow = {dept:row["Department"], course_number:row["Course"], level:row["Course Levels"], hours:row["Min Credits"], name:row["Short Title"], description:row["Description"]}
+        let newRow = {dept:row["Department"], course_number:row["Course"], subject:row["Subject"],courseNum:row["Course No"], level:row["Course Levels"], hours:row["Min Credits"], name:row["Short Title"], description:row["Description"]}
         console.log(newRow);
         courses.push(newRow);
         console.log(courses);
