@@ -25,6 +25,13 @@ const uploadSections = async (req, res) => {
     new Promise((resolve, reject) => {
       const promises = [];
       async function processData(row){
+        // Handle empty value
+        for (var key in row){
+          if (row[key] == ""){
+            row[key] = "*";
+            console.log(`${key} => ${row[key]}`)
+          }
+        }
         // Foreign key courseID
         console.log(row);
         let number = row["Course #"];
@@ -64,8 +71,16 @@ const uploadSections = async (req, res) => {
         
         // LEC faculty
           let name = row["Faculty Name (LFM)"].split(", ");
-          let first = name[1].split(" ")[0];
-          let middle = name[1].split(" ")[1];
+        // Handle empty values
+        let first = "";
+        let middle = "";
+        if (name[1]){
+          first = name[1].split(" ")[0];
+          middle = name[1].split(" ")[1];
+          if (middle = ""){
+            middle = " ";
+          }
+        }
           let last = name[0];
           // Foreign key user
           const [user, createdUser] = await User.findOrCreate({
