@@ -24,15 +24,7 @@ const uploadSections = async (req, res) => {
     new Promise((resolve, reject) => {
       const promises = [];
       async function processData(row){
-        // Handle empty value
-        for (var key in row){
-          if (row[key] == ""){
-            row[key] = "*";
-            console.log(`${key} => ${row[key]}`)
-          }
-        }
         // Foreign key courseID
-        console.log(row);
         let number = row["Course #"];
         if (number.length == 1){
           number = "000".concat(number);
@@ -57,13 +49,13 @@ const uploadSections = async (req, res) => {
         console.log(createdSemester);
         // Foreign key sectionID
         const [section, createdSection] = await Section.findOrCreate({
-          where: { number: row["Section Number"], sectionNum: row["Section #"], courseId: course.id, semesterId: semester.id },
+          where: { number: row["Section Number"] || "", sectionNum: row["Section #"], courseId: course.id, semesterId: semester.id },
         });
         console.log(section.id);
         console.log(createdSection);
         // Foreign key roomID
         const [room, createdRoom] = await Room.findOrCreate({
-          where: {bldg: row["Bldg1"], name: row["Room1"], number: row["Room1"].split("*")[1] },
+          where: {bldg: row["Bldg1"], name: row["Room1"], number: row["Room1"].split("*")[1] || "" },
         });
         console.log(room.id);
         console.log(createdRoom);
@@ -75,12 +67,11 @@ const uploadSections = async (req, res) => {
         let middle = "";
         if (name[1]){
           first = name[1].split(" ")[0];
-          middle = name[1].split(" ")[1];
-          if (middle = ""){
-            middle = " ";
-          }
+          middle = name[1].split(" ")[1] || "";
         }
           let last = name[0];
+          console.log(first);
+          console.log(last);
           // Foreign key faculty
           const [faculty, createdFaculty] = await Faculty.findOrCreate({
             where: {fName: first, lName: last, mName: middle},
@@ -99,26 +90,30 @@ const uploadSections = async (req, res) => {
         let building = row["Bldg2"].split(", ");
         let location = row["Room"].split(", ");
         let method = row["Instr Method"].split(", ");
-        let newRow = {startDate:row["Sec Start Date"], endDate:row["Sec End Date"], startTime:start[0], endTime:end[0], dayWeek:row["Days"], numWeek:row["Sec Num Of Weeks "], capacity:row["Capacity"], instrMethod:row["Instr Method"], sectionId:section.id, roomId:room.id}
+        let newRow = {startDate:row["Sec Start Date"] || "2000-01-01", endDate:row["Sec End Date"] || "2000-01-01", startTime:start[0] || "00:00:00", endTime:end[0] || "00:00:00", dayWeek:row["Days"], numWeek:row["Sec Num Of Weeks "] || 0, capacity:row["Capacity"] || 0, instrMethod:row["Instr Method"], sectionId:section.id, roomId:room.id}
         
         // Checking LEC, LAB
         if (start.length > 1){   
           // Foreign key sectionID
           const [section, createdSection] = await Section.findOrCreate({
-            where: { number: row["Section Number"].concat("L"), sectionNum: row["Section #"], courseId: course.id, semesterId: semester.id },
+            where: { number: row["Section Number"].concat("L") || "", sectionNum: row["Section #"], courseId: course.id, semesterId: semester.id },
           });
           console.log(section.id);
           console.log(createdSection);
           // Foreign key roomID
           const [room, createdRoom] = await Room.findOrCreate({
-            where: {number: location[1], bldg: building[1], name: building[1].concat("*",location[1])},
+            where: {number: location[1] || "", bldg: building[1], name: building[1].concat("*",location[1])},
           });
           console.log(room.id);
           console.log(createdRoom);
           // LAB faculty
           let name = row["Faculty Name 2 (LFM)"].split(", ");
-          let first = name[1].split(" ")[0];
-          let middle = name[1].split(" ")[1];
+          let first = "";
+          let middle = "";
+          if (name[1]){
+            first = name[1].split(" ")[0];
+            middle = name[1].split(" ")[1] || "";
+          }
           let last = name[0];
           // Foreign key faculty
           const [faculty, createdFaculty] = await Faculty.findOrCreate({
@@ -143,16 +138,14 @@ const uploadSections = async (req, res) => {
           }
           newRow.dayWeek = row["Days"].slice(0, row["Days"].length - correctDay.length);
           newRow.instrMethod = method[0];
-          // Data for LAB
-          let newRow1 = {startDate:row["Sec Start Date"], endDate:row["Sec End Date"], startTime:start[1], endTime:end[1], dayWeek:correctDay, numWeek:row["Sec Num Of Weeks "], capacity:row["Capacity"], instrMethod:method[1], sectionId:section.id, roomId:room.id};
+          // SectionTimes for LAB
+          let newRow1 = {startDate:row["Sec Start Date"] || "2000-01-01", endDate:row["Sec End Date"] || "2000-01-01", startTime:start[1] || "00:00:00", endTime:end[1] || "00:00:00", dayWeek:correctDay, numWeek:row["Sec Num Of Weeks "] || 0, capacity:row["Capacity"] || 0, instrMethod:method[1], sectionId:section.id, roomId:room.id};
           console.log(newRow1);
           sectionTimes.push(newRow1);
-          console.log(sectionTimes);
         }
-        // Data for LEC
+        // SectionTimes for LEC
         console.log(newRow);
         sectionTimes.push(newRow);
-        console.log(sectionTimes);
       }
       fs.createReadStream(path)
         .pipe(csv.parse({ headers: ["Term","Synonym","UG/GR","Section Number","Subject","Course #","Section #","Crs Level","Course Type","Reg Restrictions","Bldg1","Room1","Section Title","Faculty Name (LFM)","Faculty Name 2 (LFM)","Sec Start Date","Meeting Start Date","Sec End Date","Meeting End Date","Start Time1","End Time1","Days","Sec Num Of Weeks ","Min Cred","Max Cred","Capacity","Enr Count","Wait","Depts","Divisions","College","Faculty name Name","Faculty First Name","Instr Method","Sun","Mon","Tue","Wed","Thu","Fri","Sat","SEC.XLIST","SEC.FEE","Primary Section ","SEC.COMMENTS","SEC.PRINTED.COMMENTS","Academic Year","Term Sort No","Only Pass/NoPass","Allow Pass/NoPass","Bldg2","Room","Start Date","End Date","Start Time2","Start Time 24hr","End Time2","End Time 24hr"], renameHeaders:true }))
@@ -164,7 +157,7 @@ const uploadSections = async (req, res) => {
         .on("end", async () => {
           await Promise.all(promises);
           resolve();
-          console.log(sectionTimes)
+          //console.log(sectionTimes)
           await SectionTime.bulkCreate(sectionTimes)
           await FacultySection.bulkCreate(facultySections)
           .then(() => {
