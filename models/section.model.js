@@ -6,8 +6,8 @@ module.exports = (sequelize, Sequelize) => {
         autoIncrement: true,
         primaryKey: true
       },
-      courseNum: {
-        type: Sequelize.INTEGER
+      number: {
+        type: Sequelize.STRING
       },
       sectionNum: {
         type: Sequelize.STRING

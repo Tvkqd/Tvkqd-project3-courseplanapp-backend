@@ -58,7 +58,7 @@ const uploadSections = async (req, res) => {
         console.log(createdSemester);
         // Foreign key sectionID
         const [section, createdSection] = await Section.findOrCreate({
-          where: { number: row["Section Number"], subject: row["Subject"], courseNum:row["Course #"], sectionNum: row["Section #"], title: row["Section Title"], courseId: course.id, semesterId: semester.id },
+          where: { number: row["Section Number"], sectionNum: row["Section #"], courseId: course.id, semesterId: semester.id },
         });
         console.log(section.id);
         console.log(createdSection);
@@ -82,18 +82,19 @@ const uploadSections = async (req, res) => {
           }
         }
           let last = name[0];
-          // Foreign key user
-          const [user, createdUser] = await User.findOrCreate({
-            where: {email: first.concat(".", name[0], "@oc.edu"), role: "Faculty" },
-          });
-          console.log(user.id);
-          console.log(createdUser);
-          // Foreign key faculty
-          const [faculty, createdFaculty] = await Faculty.findOrCreate({
-            where: {fName: first, lName: last, mName: middle, userId:user.id },
+           // Foreign key faculty
+           const [faculty, createdFaculty] = await Faculty.findOrCreate({
+            where: {fName: first, lName: last, mName: middle},
           });
           console.log(faculty.id);
           console.log(createdFaculty);
+          // Foreign key user
+          const [user, createdUser] = await User.findOrCreate({
+            where: {email: first.concat(".", name[0], "@oc.edu"), role: "Faculty", facultyId: faculty.id },
+          });
+          console.log(user.id);
+          console.log(createdUser);
+         
   
           // Read data for facultySection table
           let faclRow = {facultyId: faculty.id, sectionId: section.id };
@@ -112,7 +113,7 @@ const uploadSections = async (req, res) => {
         if (start.length > 1){   
           // Foreign key sectionID
           const [section, createdSection] = await Section.findOrCreate({
-            where: { number: row["Section Number"].concat("L"), subject: row["Subject"], courseNum:row["Course #"], sectionNum: row["Section #"], title: row["Section Title"], courseId: course.id, semesterId: semester.id },
+            where: { number: row["Section Number"].concat("L"), sectionNum: row["Section #"], courseId: course.id, semesterId: semester.id },
           });
           console.log(section.id);
           console.log(createdSection);
@@ -127,18 +128,19 @@ const uploadSections = async (req, res) => {
           let first = name[1].split(" ")[0];
           let middle = name[1].split(" ")[1];
           let last = name[0];
-          // Foreign key user
-          const [user, createdUser] = await User.findOrCreate({
-            where: {email: first.concat(".", name[0], "@oc.edu"), role: "Faculty" },
-          });
-          console.log(user.id);
-          console.log(createdUser);
           // Foreign key faculty
           const [faculty, createdFaculty] = await Faculty.findOrCreate({
-            where: {fName: first, lName: last, mName: middle, userId:user.id },
+            where: {fName: first, lName: last, mName: middle},
           });
           console.log(faculty.id);
           console.log(createdFaculty);
+          // Foreign key user
+          const [user, createdUser] = await User.findOrCreate({
+            where: {email: first.concat(".", name[0], "@oc.edu"), role: "Faculty", facultyId: faculty.id },
+          });
+          console.log(user.id);
+          console.log(createdUser);
+          
   
           // Read data for facultySection table
           let faclRow = {facultyId: faculty.id, sectionId: section.id };
