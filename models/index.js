@@ -42,7 +42,9 @@ db.facultySection.belongsTo(db.faculty, { as: "faculty"}, { foreignKey: { allowN
 db.section.hasMany(db.facultySection, { as: "facultySection" }, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
 db.facultySection.belongsTo(db.section, { as: "section"}, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
 
-db.faculty.belongsTo(db.user, { as: "user"}, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
+//db.faculty.belongsTo(db.user, { as: "user"}, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
+db.faculty.hasMany(db.user, { as: "user" }, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
+db.user.belongsTo(db.faculty, { as: "faculty"}, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
 
 db.user.hasMany(db.officeHour, { as: "officeHour" }, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
 db.officeHour.belongsTo(db.user, { as: "user"}, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
