@@ -15,6 +15,8 @@ exports.create = (req, res) => {
         dept: req.body.dept,
         description: req.body.description,
         course_number: req.body.course_number,
+        subject: req.body.subject,
+        courseNum: req.body.courseNum,
         level: req.body.level,
         hours: req.body.hours,
         name: req.body.name
@@ -34,18 +36,16 @@ exports.create = (req, res) => {
 
 // Retrieve all courses from the database.
 exports.findAll = (req, res) => {
-    const course_number = req.query.course_number;
-    var condition =course_number ? {course_number: { [Op.like]: `%$course_number}%` } } : null;
-    Course.findAll({ where: condition })
-        .then(data => {
-        res.send(data);
-        })
-        .catch(err => {
-        res.status(500).send({
-            message:
-            err.message || "Some error occurred while retrieving courses."
-        });
+  Course.findAll()
+      .then(data => {
+      res.send(data);
+      })
+      .catch(err => {
+      res.status(500).send({
+          message:
+          err.message || "Some error occurred while retrieving faculty."
       });
+    });
 };
 
 // Retrieve all courses from the database in a specific department.
@@ -80,22 +80,22 @@ exports.findName = (req, res) => {
 
 // Find a single course with a course_number
 exports.findOne = (req, res) => {
-    const course_number = req.params.course_number;
-    Course.findByPk(course_number)
-      .then(data => {
-        if (data) {
-          res.send(data);
-        } else {
-          res.status(404).send({
-            message: `Cannot find Course with course_number=${course_number}.`
-          });
-        }
-      })
-      .catch(err => {
-        res.status(500).send({
-          message: "Error retrieving Course with course_number=" + course_number
+  const id = req.params.id;
+  Course.findByPk(id)
+    .then(data => {
+      if (data) {
+        res.send(data);
+      } else {
+        res.status(404).send({
+          message: `Cannot find Course with id=${id}.`
         });
+      }
+    })
+    .catch(err => {
+      res.status(500).send({
+        message: "Error retrieving Course with id=" + id
       });
+    });
 };
 // Update by the id in the request
 exports.update = (req, res) => {
