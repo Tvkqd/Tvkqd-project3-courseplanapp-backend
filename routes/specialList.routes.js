@@ -7,6 +7,10 @@ module.exports = app => {
     router.get("/", specialList.findAll);
     // Retrieve a single facultySection with id
     router.get("/:id", specialList.findOne);
+    // Retrieve specialList of a user with id
+    router.get("/user/:id", specialList.findUserSpeciallist);
+    // Retrieve specialList of a course with id
+    router.get("/course/:id", specialList.findCourseSpeciallist);
     // Update with id
     router.put("/:id", specialList.update);
     // Delete with id

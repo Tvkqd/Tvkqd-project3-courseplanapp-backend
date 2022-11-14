@@ -1,18 +1,22 @@
 const db = require("../models");
 const SpecialList = db.specialList;
+const User = db.user;
+const Course = db.courses;
 const Op = db.Sequelize.Op;
 // Create and Save 
 exports.create = (req, res) => {
         // Validate input
     if (!req.body.name) {
         res.status(400).send({
-        message: "Name can not be empty!"
+        message: "Content can not be empty!"
         });
         return;
     }
     // Create
     const specialList = {
-        name: req.body.name
+        name: req.body.name,
+        userId: req.body.userId,
+        courseId: req.body.courseId
     };
     // Save in the database
     SpecialList.create(specialList)
@@ -60,6 +64,48 @@ exports.findOne = (req, res) => {
         });
       });
 };
+
+// Find SpecialList of a user with an id
+exports.findUserSpeciallist = (req, res) => {
+  const id = req.params.id;
+  User.findByPk(id, {include: ["specialList"]})
+    .then(data => {
+      if (data) {
+        res.send(data);
+      } else {
+        res.status(404).send({
+          message: `Cannot find SpecialList of a user with id=${id}.`
+        });
+      }
+    })
+    .catch(err => {
+      res.status(500).send({
+        message: "Error retrieving SpecialList of a user with id=" + id
+      });
+    });
+};
+
+// Find SpecialList of a course with an id
+exports.findCourseSpeciallist = (req, res) => {
+  const id = req.params.id;
+  Course.findByPk(id, {include: ["specialList"]})
+    .then(data => {
+      if (data) {
+        res.send(data);
+      } else {
+        res.status(404).send({
+          message: `Cannot find SpecialList of a course with id=${id}.`
+        });
+      }
+    })
+    .catch(err => {
+      res.status(500).send({
+        message: "Error retrieving SpecialList of a course with id=" + id
+      });
+    });
+};
+
+
 // Update by the id in the request
 exports.update = (req, res) => {
     const id = req.params.id;

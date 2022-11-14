@@ -1,5 +1,7 @@
 const db = require("../models");
 const Section = db.section;
+const Course = db.courses;
+const Semester = db.semester;
 const Op = db.Sequelize.Op;
 // Create and Save 
 exports.create = (req, res) => {
@@ -42,6 +44,46 @@ exports.findAll = (req, res) => {
             err.message || "Some error occurred while retrieving Section."
         });
       });
+};
+
+// Find sections of a course with an id
+exports.findCourseSection = (req, res) => {
+  const id = req.params.id;
+  Course.findByPk(id, {include: ["section"]})
+    .then(data => {
+      if (data) {
+        res.send(data);
+      } else {
+        res.status(404).send({
+          message: `Cannot find Section of Course with id=${id}.`
+        });
+      }
+    })
+    .catch(err => {
+      res.status(500).send({
+        message: "Error retrieving Section of Course with id=" + id
+      });
+    });
+};
+
+// Find sections of a semester with an id
+exports.findSemesterSection = (req, res) => {
+  const id = req.params.id;
+  Semester.findByPk(id, {include: ["section"]})
+    .then(data => {
+      if (data) {
+        res.send(data);
+      } else {
+        res.status(404).send({
+          message: `Cannot find sections of Semester with id=${id}.`
+        });
+      }
+    })
+    .catch(err => {
+      res.status(500).send({
+        message: "Error retrieving sections of Semester with id=" + id
+      });
+    });
 };
 
 // Find a single with a id

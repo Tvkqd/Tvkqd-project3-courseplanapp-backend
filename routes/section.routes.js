@@ -5,8 +5,12 @@ module.exports = app => {
     router.post("/", section.create);
     // Retrieve all 
     router.get("/", section.findAll);
-    // Retrieve a single facultySection with id
+    // Retrieve a single with id
     router.get("/:id", section.findOne);
+    // Retrieve sections of a course with id
+    router.get("/course/:id", section.findCourseSection);
+    // Retrieve sections of a semester with id
+    router.get("/semester/:id", section.findSemesterSection);
     // Update with id
     router.put("/:id", section.update);
     // Delete with id
