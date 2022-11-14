@@ -4,15 +4,17 @@ const Op = db.Sequelize.Op;
 // Create and Save 
 exports.create = (req, res) => {
         // Validate input
-    if (!req.body.name) {
+    if (!req.body.fName) {
         res.status(400).send({
-        message: "Name can not be empty!"
+        message: "Content can not be empty!"
         });
         return;
     }
     // Create
     const faculty = {
-        name: req.body.name
+        fName: req.body.fName,
+        lName: req.body.lName,
+        mName: req.body.mName
     };
     // Save in the database
     Faculty.create(faculty)
