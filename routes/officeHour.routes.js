@@ -7,8 +7,8 @@ module.exports = app => {
     router.get("/", officeHour.findAll);
     // Retrieve a single officeHour with id
     router.get("/:id", officeHour.findOne);
-    // Retrieve a single officeHour with id
-    router.get("/user/:id", officeHour.findOne);
+    // Retrieve officeHour of a user with id
+    router.get("/user/:id", officeHour.findUserOfficeHour);
     // Update with id
     router.put("/:id", officeHour.update);
     // Delete with id

@@ -9,6 +9,8 @@ module.exports = app => {
     router.get("/:id", user.findOne);
     // Update with id
     router.put("/:id", user.update);
+    // // Delete officeHour of a user with id
+    // router.delete("/:userId/:id", officeHour.delete);
     // Delete with id
     router.delete("/:id", user.delete);
     //Changed to scheduleSection to build the api path to match the AWS server. Making router file unique by adding /courses

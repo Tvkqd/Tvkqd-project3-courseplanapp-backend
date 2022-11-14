@@ -47,7 +47,7 @@ exports.findAll = (req, res) => {
 };
 
 // Find officeHour of a user with an id
-exports.findOne = (req, res) => {
+exports.findUserOfficeHour = (req, res) => {
     const id = req.params.id;
     User.findByPk(id, {include: ["officeHour"]})
       .then(data => {
@@ -69,19 +69,19 @@ exports.findOne = (req, res) => {
 // Find a single with an id
 exports.findOne = (req, res) => {
   const id = req.params.id;
-  Course.findByPk(id)
+  officeHour.findByPk(id)
     .then(data => {
       if (data) {
         res.send(data);
       } else {
         res.status(404).send({
-          message: `Cannot find Course with id=${id}.`
+          message: `Cannot find officeHour with id=${id}.`
         });
       }
     })
     .catch(err => {
       res.status(500).send({
-        message: "Error retrieving Course with id=" + id
+        message: "Error retrieving officeHour with id=" + id
       });
     });
 };
