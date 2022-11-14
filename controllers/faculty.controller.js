@@ -29,7 +29,7 @@ exports.create = (req, res) => {
         });
 };
 
-// Retrieve all courses from the database.
+// Retrieve all from the database.
 exports.findAll = (req, res) => {
     Faculty.findAll()
         .then(data => {
@@ -43,7 +43,7 @@ exports.findAll = (req, res) => {
       });
 };
 
-// Find a single course with a id
+// Find a single with a id
 exports.findOne = (req, res) => {
     const id = req.params.id;
     Faculty.findByPk(id)

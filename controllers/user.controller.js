@@ -4,15 +4,17 @@ const Op = db.Sequelize.Op;
 // Create and Save 
 exports.create = (req, res) => {
         // Validate input
-    if (!req.body.name) {
+    if (!req.body.email) {
         res.status(400).send({
-        message: "Name can not be empty!"
+        message: "Content can not be empty!"
         });
         return;
     }
     // Create
     const user = {
-        name: req.body.name
+        email: req.body.email,
+        role: req.body.role,
+        facultyId: req.body.facultyId
     };
     // Save in the database
     User.create(user)
@@ -24,7 +26,7 @@ exports.create = (req, res) => {
             message:
             err.message || "Some error occurred while creating the User."
         });
-        });
+  });
 };
 
 // Retrieve all users from the database.
