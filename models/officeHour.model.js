@@ -10,10 +10,10 @@ module.exports = (sequelize, Sequelize) => {
         type: Sequelize.STRING
       },
       startTime: {
-        type: Sequelize.STRING
+        type: Sequelize.TIME
       },
       endTime: {
-        type: Sequelize.STRING
+        type: Sequelize.TIME
       }
     },
     {

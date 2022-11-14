@@ -1,18 +1,23 @@
+const { officeHour } = require("../models");
 const db = require("../models");
 const OfficeHour = db.officeHour;
+const User = db.user;
 const Op = db.Sequelize.Op;
 // Create and Save 
 exports.create = (req, res) => {
-        // Validate input
-    // if (!req.body.name) {
-    //     res.status(400).send({
-    //     message: "Name can not be empty!"
-    //     });
-    //     return;
-    // }
+    // Validate input
+    if (!req.body.dayWeek) {
+        res.status(400).send({
+        message: "Content can not be empty!"
+        });
+        return;
+    }
     // Create
     const officeHour = {
-        name: req.body.name
+        dayWeek: req.body.dayWeek,
+        startTime: req.body.startTime,
+        endTime: req.body.endTime,
+        userId: req.body.userId
     };
     // Save in the database
     OfficeHour.create(officeHour)
@@ -24,10 +29,10 @@ exports.create = (req, res) => {
             message:
             err.message || "Some error occurred while creating the OfficeHour."
         });
-        });
+    });
 };
 
-// Retrieve all courses from the database.
+// Retrieve all from the database.
 exports.findAll = (req, res) => {
     OfficeHour.findAll()
         .then(data => {
@@ -41,10 +46,10 @@ exports.findAll = (req, res) => {
       });
 };
 
-// Find a single course with a id
+// Find officeHour of a user with an id
 exports.findOne = (req, res) => {
     const id = req.params.id;
-    OfficeHour.findByPk(id)
+    User.findByPk(id, {include: ["officeHour"]})
       .then(data => {
         if (data) {
           res.send(data);
@@ -59,6 +64,26 @@ exports.findOne = (req, res) => {
           message: "Error retrieving OfficeHour with id=" + id
         });
       });
+};
+
+// Find a single with an id
+exports.findOne = (req, res) => {
+  const id = req.params.id;
+  Course.findByPk(id)
+    .then(data => {
+      if (data) {
+        res.send(data);
+      } else {
+        res.status(404).send({
+          message: `Cannot find Course with id=${id}.`
+        });
+      }
+    })
+    .catch(err => {
+      res.status(500).send({
+        message: "Error retrieving Course with id=" + id
+      });
+    });
 };
 // Update by the id in the request
 exports.update = (req, res) => {
