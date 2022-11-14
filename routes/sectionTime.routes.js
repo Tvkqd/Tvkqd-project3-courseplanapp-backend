@@ -7,6 +7,8 @@ module.exports = app => {
     router.get("/", sectionTime.findAll);
     // Retrieve a single facultySection with id
     router.get("/:id", sectionTime.findOne);
+    // Retrieve sectionTime of a room with id
+    router.get("/room/:id", sectionTime.findRoomSectiontime);
     // Update with id
     router.put("/:id", sectionTime.update);
     // Delete with id

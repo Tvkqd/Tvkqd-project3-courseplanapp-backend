@@ -1,18 +1,29 @@
 const db = require("../models");
 const SectionTime = db.sectionTime;
+const Section = db.section;
+const Room = db.room;
 const Op = db.Sequelize.Op;
 // Create and Save 
 exports.create = (req, res) => {
         // Validate input
-    if (!req.body.name) {
+    if (!req.body.startDate) {
         res.status(400).send({
-        message: "Name can not be empty!"
+        message: "Content can not be empty!"
         });
         return;
     }
     // Create
     const sectionTime = {
-        name: req.body.name
+        startDate: req.body.startDate,
+        endDate: req.body.endDate,
+        startTime: req.body.startTime,
+        endTime: req.body.endTime,
+        dayWeek: req.body.dayWeek,
+        numWeek: req.body.numWeek,
+        capacity: req.body.capacity,
+        instrMethod: req.body.instrMethod,
+        sectionId: req.body.sectionId,
+        roomId: req.body.roomId
     };
     // Save in the database
     SectionTime.create(sectionTime)
@@ -27,7 +38,7 @@ exports.create = (req, res) => {
         });
 };
 
-// Retrieve all courses from the database.
+// Retrieve all from the database.
 exports.findAll = (req, res) => {
     SectionTime.findAll()
         .then(data => {
@@ -41,7 +52,7 @@ exports.findAll = (req, res) => {
       });
 };
 
-// Find a single course with a id
+// Find a single with a id
 exports.findOne = (req, res) => {
     const id = req.params.id;
     SectionTime.findByPk(id)
@@ -59,6 +70,26 @@ exports.findOne = (req, res) => {
           message: "Error retrieving SectionTime with id=" + id
         });
       });
+};
+
+// Find sectionTime of a room with an id
+exports.findRoomSectiontime = (req, res) => {
+  const id = req.params.id;
+  Room.findByPk(id, {include: ["sectionTime"]})
+    .then(data => {
+      if (data) {
+        res.send(data);
+      } else {
+        res.status(404).send({
+          message: `Cannot find sectionTime of Room with id=${id}.`
+        });
+      }
+    })
+    .catch(err => {
+      res.status(500).send({
+        message: "Error retrieving sectionTime of Room with id=" + id
+      });
+    });
 };
 // Update by the id in the request
 exports.update = (req, res) => {
