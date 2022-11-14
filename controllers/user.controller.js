@@ -110,30 +110,3 @@ exports.delete = (req, res) => {
         });
       });
 };
-
-// // Delete with the specified id in the request
-// exports.delete = (req, res) => {
-//   const id = req.params.id;
-//   const userId = req.params.userId;
-//   OfficeHour.destroy({
-//     where: { id: id }
-//   })
-//     .then(num => {
-//       if (num == 1) {
-//         res.send({
-//           message: "OfficeHour was deleted successfully!"
-//         });
-//       } else {
-//         console.log("error: " + num)
-//         res.send({
-//           message: `Cannot delete OfficeHour with id=${id}. Maybe OfficeHour was not found!`
-//         });
-//       }
-//     })
-//     .catch(err => {
-//       console.log("error: " + err)
-//       res.status(500).send({
-//         message: "Could not delete OfficeHour with id=" + id
-//       });
-//     });
-// };

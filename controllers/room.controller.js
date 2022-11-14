@@ -3,16 +3,18 @@ const Room = db.room;
 const Op = db.Sequelize.Op;
 // Create and Save 
 exports.create = (req, res) => {
-        // Validate input
-    if (!req.body.name) {
+    // Validate input
+    if (!req.body.number) {
         res.status(400).send({
-        message: "Name can not be empty!"
-        });
+        message: "Content can not be empty!"
+      });
         return;
     }
     // Create
     const room = {
-        name: req.body.name
+      number: req.body.number,
+      bldg: req.body.bldg,  
+      name: req.body.name
     };
     // Save in the database
     Room.create(room)
@@ -27,7 +29,7 @@ exports.create = (req, res) => {
         });
 };
 
-// Retrieve all courses from the database.
+// Retrieve all from the database.
 exports.findAll = (req, res) => {
     Room.findAll()
         .then(data => {
@@ -36,12 +38,12 @@ exports.findAll = (req, res) => {
         .catch(err => {
         res.status(500).send({
             message:
-            err.message || "Some error occurred while retrieving room."
+            err.message || "Some error occurred while retrieving rooms."
         });
       });
 };
 
-// Find a single course with a id
+// Find a single with a id
 exports.findOne = (req, res) => {
     const id = req.params.id;
     Room.findByPk(id)

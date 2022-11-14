@@ -4,15 +4,18 @@ const Op = db.Sequelize.Op;
 // Create and Save 
 exports.create = (req, res) => {
         // Validate input
-    if (!req.body.name) {
+    if (!req.body.number) {
         res.status(400).send({
-        message: "Name can not be empty!"
+        message: "Content can not be empty!"
         });
         return;
     }
     // Create
     const section = {
-        name: req.body.name
+        number: req.body.number,
+        sectionNum: req.body.sectionNum,
+        courseId: req.body.courseId,
+        semesterId: req.body.semesterId
     };
     // Save in the database
     Section.create(section)
@@ -27,7 +30,7 @@ exports.create = (req, res) => {
         });
 };
 
-// Retrieve all courses from the database.
+// Retrieve all from the database.
 exports.findAll = (req, res) => {
     Section.findAll()
         .then(data => {
@@ -41,7 +44,7 @@ exports.findAll = (req, res) => {
       });
 };
 
-// Find a single course with a id
+// Find a single with a id
 exports.findOne = (req, res) => {
     const id = req.params.id;
     Section.findByPk(id)
