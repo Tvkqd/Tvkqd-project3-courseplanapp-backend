@@ -9,7 +9,10 @@ module.exports = (sequelize, Sequelize) => {
       email: {
         type: Sequelize.STRING
       },
-      role: {
+      fName: {
+        type: Sequelize.STRING
+      },
+      lName: {
         type: Sequelize.STRING
       }
     },

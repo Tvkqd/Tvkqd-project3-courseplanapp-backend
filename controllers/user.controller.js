@@ -1,51 +1,61 @@
 const db = require("../models");
 const User = db.user;
 const Op = db.Sequelize.Op;
-// Create and Save 
+
+// Create and Save a new User
 exports.create = (req, res) => {
-        // Validate input
-    if (!req.body.email) {
-        res.status(400).send({
+    // Validate request
+    if (!req.body.fName) {
+      res.status(400).send({
         message: "Content can not be empty!"
-        });
-        return;
+      });
+      return;
     }
-    // Create
+  
+    // Create a User
     const user = {
-        email: req.body.email,
-        role: req.body.role,
-        facultyId: req.body.facultyId
+      id: req.body.id,
+      fName: req.body.fName,
+      lName: req.body.lName,
+      email: req.body.email,
+      // refresh_token: req.body.refresh_token,
+      // expiration_date: req.body.expiration_date
     };
-    // Save in the database
+  
+    // Save User in the database
     User.create(user)
-        .then(data => {
+      .then(data => {
         res.send(data);
-        })
-        .catch(err => {
+      })
+      .catch(err => {
         res.status(500).send({
-            message:
+          message:
             err.message || "Some error occurred while creating the User."
         });
-  });
-};
+      });
+  };
 
-// Retrieve all users from the database.
+// Retrieve all People from the database.
 exports.findAll = (req, res) => {
-    User.findAll()
-        .then(data => {
+    const id = req.query.id;
+    var condition = id ? { id: { [Op.like]: `%${id}%` } } : null;
+  
+    User.findAll({ where: condition })
+      .then(data => {
         res.send(data);
-        })
-        .catch(err => {
+      })
+      .catch(err => {
         res.status(500).send({
-            message:
-            err.message || "Some error occurred while retrieving user."
+          message:
+            err.message || "Some error occurred while retrieving people."
         });
       });
-};
+  };
 
-// Find a single user with a id
+// Find a single User with an id
 exports.findOne = (req, res) => {
     const id = req.params.id;
+  
     User.findByPk(id)
       .then(data => {
         if (data) {
@@ -61,10 +71,39 @@ exports.findOne = (req, res) => {
           message: "Error retrieving User with id=" + id
         });
       });
+  };
+
+// Find a single User with an email
+exports.findByEmail = (req, res) => {
+  const email = req.params.email;
+
+  User.findOne({ 
+    where: {
+      email: email 
+    }
+  })
+    .then(data => {
+      if (data) {
+        res.send(data);
+      } else {
+        res.send({email: 'not found'});
+        /*res.status(404).send({
+          message: `Cannot find User with email=${email}.`
+        });*/
+      }
+    })
+    .catch(err => {
+      res.status(500).send({
+        message: "Error retrieving User with email=" + email
+      });
+    });
 };
-// Update by the id in the request
+
+
+// Update a User by the id in the request
 exports.update = (req, res) => {
     const id = req.params.id;
+  
     User.update(req.body, {
       where: { id: id }
     })
@@ -84,10 +123,12 @@ exports.update = (req, res) => {
           message: "Error updating User with id=" + id
         });
       });
-};
-// Delete with the specified id in the request
+  };
+
+// Delete a User with the specified id in the request
 exports.delete = (req, res) => {
     const id = req.params.id;
+  
     User.destroy({
       where: { id: id }
     })
@@ -97,16 +138,31 @@ exports.delete = (req, res) => {
             message: "User was deleted successfully!"
           });
         } else {
-          console.log("error: " + num)
           res.send({
             message: `Cannot delete User with id=${id}. Maybe User was not found!`
           });
         }
       })
       .catch(err => {
-        console.log("error: " + err)
         res.status(500).send({
           message: "Could not delete User with id=" + id
         });
       });
-};
+  };
+
+// Delete all People from the database.
+exports.deleteAll = (req, res) => {
+    User.destroy({
+      where: {},
+      truncate: false
+    })
+      .then(nums => {
+        res.send({ message: `${nums} People were deleted successfully!` });
+      })
+      .catch(err => {
+        res.status(500).send({
+          message:
+            err.message || "Some error occurred while removing all people."
+        });
+      });
+  };

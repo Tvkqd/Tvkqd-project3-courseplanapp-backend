@@ -1,20 +1,21 @@
 module.exports = app => {
     const specialList = require("../controllers/specialList.controller.js");
     var router = require("express").Router();
+    const { authenticate } = require("../authorization/authorization.js");
     // Create 
-    router.post("/", specialList.create);
+    router.post("/", [authenticate], specialList.create);
     // Retrieve all 
-    router.get("/", specialList.findAll);
+    router.get("/", [authenticate], specialList.findAll);
     // Retrieve a single facultySection with id
-    router.get("/:id", specialList.findOne);
+    router.get("/:id", [authenticate], specialList.findOne);
     // Retrieve specialList of a user with id
-    router.get("/user/:id", specialList.findUserSpeciallist);
+    router.get("/user/:id", [authenticate], specialList.findUserSpeciallist);
     // Retrieve specialList of a course with id
-    router.get("/course/:id", specialList.findCourseSpeciallist);
+    router.get("/course/:id", [authenticate], specialList.findCourseSpeciallist);
     // Update with id
-    router.put("/:id", specialList.update);
+    router.put("/:id", [authenticate], specialList.update);
     // Delete with id
-    router.delete("/:id", specialList.delete);
+    router.delete("/:id", [authenticate], specialList.delete);
     //Changed to scheduleSection to build the api path to match the AWS server. Making router file unique by adding /courses
     app.use('/schedule-t1/specialList', router);
   };

@@ -14,6 +14,7 @@ const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
 const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
+db.session = require("./session.model.js")(sequelize, Sequelize);
 db.courses = require("./course.model.js")(sequelize, Sequelize);
 db.faculty = require("./faculty.model.js")(sequelize, Sequelize);
 db.facultySection = require("./facultySection.model.js")(sequelize, Sequelize);
@@ -24,6 +25,9 @@ db.sectionTime = require("./sectionTime.model.js")(sequelize, Sequelize);
 db.semester = require("./semester.model.js")(sequelize, Sequelize);
 db.specialList = require("./specialList.model.js")(sequelize, Sequelize);
 db.user = require("./user.model.js")(sequelize, Sequelize);
+
+db.user.hasMany(db.session, { as: 'session'}, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
+db.session.belongsTo(db.user, { as: 'user'}, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
 
 db.courses.hasMany(db.section, { as: "section" }, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
 db.section.belongsTo(db.courses, { as: "course"}, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
@@ -43,8 +47,8 @@ db.section.hasMany(db.facultySection, { as: "facultySection" }, { foreignKey: { 
 db.facultySection.belongsTo(db.section, { as: "section"}, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
 
 //db.faculty.belongsTo(db.user, { as: "user"}, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
-db.faculty.hasMany(db.user, { as: "user" }, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
-db.user.belongsTo(db.faculty, { as: "faculty"}, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
+db.user.hasMany(db.faculty, { as: "faculty"}, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
+db.faculty.belongsTo(db.user, { as: "user" }, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
 
 db.user.hasMany(db.officeHour, { as: "officeHour" }, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
 db.officeHour.belongsTo(db.user, { as: "user"}, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
